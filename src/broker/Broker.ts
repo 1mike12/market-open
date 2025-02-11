@@ -12,8 +12,13 @@ export type BrokerConfig<T extends EnumType<string>> = {
     timezone: string;
     statusEnum: T;
     defaultStatus: EnumValue<T>;
-    weeklySchedule: weekdaySchedule<T>[],
-    holidays: any
+    weeklySchedule: weekdaySchedule<T>[];
+    holidays: HolidayConfigType<T>[];
+}
+
+export type HolidayConfigType<T extends EnumType<string>> = {
+    name: string
+    check: (date: Date) => EnumValue<T>
 }
 
 type EnumType<T extends string | number> = {
@@ -51,20 +56,27 @@ export class Broker<T extends EnumType<string>> {
         }
 
         const dayOfWeek = localDate.getDay();
-        const schedule = this.config.weeklySchedule.find(s => s.day === dayOfWeek);
+        const schedules = this.config.weeklySchedule.filter(s => s.day === dayOfWeek)
 
-        if (!schedule) {
+        if (schedules.length === 0) {
             return [this.config.defaultStatus];
         }
 
         // Parse schedule times in broker's timezone
-        const currentTime = format(localDate, 'HH:mm', { timeZone: this.config.timezone });
+        const currentTime = format(localDate, 'HH:mm', {timeZone: this.config.timezone});
         const currentMinutes = this.timeToMinutes(currentTime);
-        const startMinutes = this.timeToMinutes(schedule.start);
-        const endMinutes = this.timeToMinutes(schedule.end);
 
-        if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
-            return [schedule.type];
+        const matches = []
+        for (const schedule of schedules) {
+            const startMinutes = this.timeToMinutes(schedule.start);
+            const endMinutes = this.timeToMinutes(schedule.end);
+
+            if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+                matches.push(schedule.type)
+            }
+        }
+        if (matches.length > 0) {
+            return matches;
         }
 
         return [this.config.defaultStatus];

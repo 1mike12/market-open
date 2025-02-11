@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+     /* Base Options: */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "ES2022",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+
+    /* Strictness */
+    "strict": false,
+    "noImplicitAny": false,
+    /* options since we are using tsc to compile */
+    //keep it as node otherwise we can't do import x from "y", and it needs to be from "y.js" which is dumb
+    "moduleResolution": "node",
+    "module": "NodeNext",
+    "outDir": "dist",
+    // Strips all comments from TypeScript files when converting into JavaScript- you rarely read compiled code so this saves space
+    "removeComments": true,
+    // required for breakpoints in intellij to work
+    "sourceMap": true,
+
+
+    // filenames can be imported case insensitively depending on the platform. force imports to match
+    "forceConsistentCasingInFileNames": true,
+    // needed to make intellij import {type X} from "y" work
+    "verbatimModuleSyntax": true
+  },
+  // exclude prevents typescript from analyzing and compiling, but Intellisense will still work
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
+}

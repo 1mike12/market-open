@@ -1,0 +1,27 @@
+{
+  "name": "node22-boilerplate",
+  "version": "1.0.0",
+  "type": "module",
+  "license": "MS-PL",
+  "scripts": {
+    "build": "swc src -d dist --config-file .swcrc",
+    "test": "npm run build && mocha"
+  },
+  "devDependencies": {
+    "@swc-node/register": "^1.10.9",
+    "@swc/cli": "^0.1.59",
+    "@swc/core": "^1.3.80",
+    "@types/chai": "^5.0.1",
+    "@types/mocha": "^10.0.10",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "dayjs": "^1.11.13",
+    "luxon": "^3.5.0",
+    "moment-timezone": "^0.5.47"
+  }
+}

@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {Broker, type BrokerConfig} from './Broker';
+import {Broker} from './Broker';
 import {nyse_basic_brokerage} from "./test_configs/nyse_basic_brokerage";
 import {all_open_brokerage_except_new_years} from "./test_configs/all_open_brokerage_except_new_years";
 
@@ -7,6 +7,9 @@ enum Status {
     OPEN = "OPEN",
     CLOSED = "CLOSED",
 }
+
+const mondayAtNoon = new Date('2021-01-04T17:00:00Z');
+const mondayAfterClose = new Date('2021-01-04T21:00:00Z');
 
 describe('HolidayType', () => {
 
@@ -42,6 +45,14 @@ describe('HolidayType', () => {
             expect(broker.getOpenStatus(new Date('2021-01-09T17:00:00Z'))).deep.equal(null); // 12:00 PM NYC time
             // sunday
             expect(broker.getOpenStatus(new Date('2021-01-10T17:00:00Z'))).deep.equal(null); // 12:00 PM NYC time
+        })
+    })
+
+    describe("other methods", () => {
+        it("isClosed", () => {
+            const broker = new Broker(nyse_basic_brokerage);
+            expect(broker.isOpen(mondayAtNoon)).equal(true);
+            expect(broker.isOpen(mondayAfterClose)).equal(false);
         })
     })
 })

@@ -1,4 +1,5 @@
 import {format, toZonedTime,} from "date-fns-tz";
+import {timeToMinutes} from "../date_utils/stringTimeToMinutes";
 
 type weekdaySchedule<T extends EnumType> = {
     day: number;
@@ -33,9 +34,8 @@ export class Broker<S extends EnumType, H extends EnumType> {
         this.config = config;
     }
 
-    private timeToMinutes(timeStr: string): number {
-        const [hours, minutes] = timeStr.split(':').map(Number);
-        return hours * 60 + minutes;
+    isOpen(date: Date): boolean {
+        return this.getOpenStatus(date) !== null;
     }
 
     getOpenStatus(date: Date): EnumValue<S>[] | null {
@@ -64,12 +64,12 @@ export class Broker<S extends EnumType, H extends EnumType> {
 
         // Parse schedule times in broker's timezone
         const currentTime = format(localDate, 'HH:mm', {timeZone: this.config.timezone});
-        const currentMinutes = this.timeToMinutes(currentTime);
+        const currentMinutes = timeToMinutes(currentTime);
 
         const matches = []
         for (const schedule of schedules) {
-            const startMinutes = this.timeToMinutes(schedule.start);
-            const endMinutes = this.timeToMinutes(schedule.end);
+            const startMinutes = timeToMinutes(schedule.start);
+            const endMinutes = timeToMinutes(schedule.end);
 
             if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
                 matches.push(schedule.type)

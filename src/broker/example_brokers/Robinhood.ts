@@ -13,15 +13,15 @@ const weeklySchedule = []
 for (let i = 1; i <= 5; i++) {
     weeklySchedule.push({
         day: i,
-        type: RobinhoodStatus.OPEN,
-        start: "09:30",
-        end: "16:00"
-    })
-    weeklySchedule.push({
-        day: i,
         type: RobinhoodStatus.PRE_MARKET,
         start: "07:00",
         end: "09:30"
+    })
+    weeklySchedule.push({
+        day: i,
+        type: RobinhoodStatus.OPEN,
+        start: "09:30",
+        end: "16:00"
     })
     weeklySchedule.push({
         day: i,

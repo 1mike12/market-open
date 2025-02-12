@@ -1,13 +1,13 @@
-import {getBlackFriday} from "../fixed/getBlackFriday";
-import {getLaborDay} from "../fixed/getLaborDay";
-import {getMartinLutherKingDay} from "../fixed/getMartinLutherKingDay";
-import {getMemorialDay} from "../fixed/getMemorialDay";
-import {getPresidentsDay} from "../fixed/getPresidentsDay";
-import {getThanksgiving} from "../fixed/getThanksgiving";
-import {getGoodFriday} from "../dynamic_holidays/good_friday/getGoodFriday";
-import {getChristmas} from "../dynamic_holidays/getChristmas";
-import {getJuly4th} from "../dynamic_holidays/getJuly4th";
-import {getNewYears} from "../dynamic_holidays/getNewYears";
+import {getBlackFriday} from "../x_yDay_of_month/getBlackFriday";
+import {getLaborDay} from "../x_yDay_of_month/getLaborDay";
+import {getMartinLutherKingDay} from "../x_yDay_of_month/getMartinLutherKingDay";
+import {getMemorialDay} from "../x_yDay_of_month/getMemorialDay";
+import {getPresidentsDay} from "../x_yDay_of_month/getPresidentsDay";
+import {getThanksgiving} from "../x_yDay_of_month/getThanksgiving";
+import {getGoodFriday} from "../other/good_friday/getGoodFriday";
+import {getChristmas} from "../fixed_days/getChristmas";
+import {getJuly4th} from "../fixed_days/getJuly4th";
+import {getNewYears} from "../fixed_days/getNewYears";
 
 /**
  * we check the fastest to calculate holidays first, which are the fixed date ones

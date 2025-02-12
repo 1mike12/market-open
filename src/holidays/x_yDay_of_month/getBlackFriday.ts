@@ -6,5 +6,5 @@ import {isNthDayOfMonth} from "./isNthDayOfMonth";
  * @param date
  */
 export function getBlackFriday(date: Date) {
-     return isNthDayOfMonth(date, 11, 5, 4) ? HolidayStatus.CLOSED : null;
+     return isNthDayOfMonth(date, 11, 5, 4) ? HolidayStatus.HALF_DAY : null;
 }

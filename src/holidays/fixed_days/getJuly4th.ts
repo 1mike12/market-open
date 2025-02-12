@@ -1,4 +1,4 @@
-import {isClosedForShiftingHoliday} from "./isClosedForShiftingHoliday";
+import {getStatusForShiftingHoliday} from "./getStatusForShiftingHoliday";
 
 /**
  *  there are complex rules for July 4th
@@ -8,5 +8,5 @@ import {isClosedForShiftingHoliday} from "./isClosedForShiftingHoliday";
  * @param date
  */
 export function getJuly4th(date: Date) {
-    return isClosedForShiftingHoliday(date, 7, 4)
+    return getStatusForShiftingHoliday(date, 7, 4)
 }

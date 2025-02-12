@@ -1,5 +1,5 @@
-import {isClosedForShiftingHoliday} from "./isClosedForShiftingHoliday";
+import {getStatusForShiftingHoliday} from "./getStatusForShiftingHoliday";
 
 export function getNewYears(date: Date) {
-    return isClosedForShiftingHoliday(date, 1, 1);
+    return getStatusForShiftingHoliday(date, 1, 1);
 }

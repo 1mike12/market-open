@@ -1,4 +1,4 @@
-import {isSameDay, subDays, addDays, getDay, getMonth, getDate, getYear, isWeekend} from 'date-fns';
+import {isSameDay, subDays, addDays, getDay, getMonth, getDate, getYear} from 'date-fns';
 import {HolidayStatus} from "../HolidayStatus";
 
 /**
@@ -19,7 +19,7 @@ import {HolidayStatus} from "../HolidayStatus";
  * - Jan 2: CLOSED (if Jan 1 is Sunday)
  * All other dates: null
  */
-export function isClosedForShiftingHoliday(
+export function getStatusForShiftingHoliday(
     date: Date,
     month: number,
     holidayDayOfMonth: number,

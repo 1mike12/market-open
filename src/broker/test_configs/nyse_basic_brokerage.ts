@@ -1,15 +1,15 @@
 import type {BrokerConfig} from "../Broker";
+import {HolidayStatus} from "../../holidays/HolidayStatus";
 
 enum Status {
     OPEN = "OPEN",
     CLOSED = "CLOSED",
 }
 
-export const nyse_basic_brokerage: BrokerConfig<typeof Status> = {
+export const nyse_basic_brokerage: BrokerConfig<typeof Status, typeof HolidayStatus> = {
     name: "NYSE",
     timezone: "America/New_York",
-    statusEnum: Status,
-    defaultStatus: Status.CLOSED,
+    holidayToStatus: () => Status.OPEN,
     weeklySchedule: [
          {
             day: 1,

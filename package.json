@@ -5,7 +5,7 @@
   "license": "MS-PL",
   "scripts": {
     "build": "swc src -d dist --config-file .swcrc",
-    "test": "npm run build && mocha"
+    "test": "mocha"
   },
   "devDependencies": {
     "@swc-node/register": "^1.10.9",
@@ -19,9 +19,6 @@
   },
   "dependencies": {
     "date-fns": "^4.1.0",
-    "date-fns-tz": "^3.2.0",
-    "dayjs": "^1.11.13",
-    "luxon": "^3.5.0",
-    "moment-timezone": "^0.5.47"
+    "date-fns-tz": "^3.2.0"
   }
 }

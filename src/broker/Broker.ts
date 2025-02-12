@@ -1,40 +1,35 @@
 import {format, toZonedTime,} from "date-fns-tz";
 
-type weekdaySchedule<T extends EnumType<string>> = {
+type weekdaySchedule<T extends EnumType> = {
     day: number;
     type: EnumValue<T>;
     start: string;
     end: string;
 }
 
-export type BrokerConfig<T extends EnumType<string>> = {
+export type BrokerConfig<S extends EnumType, H extends EnumType> = {
     name: string;
     timezone: string;
-    statusEnum: T;
-    defaultStatus: EnumValue<T>;
-    weeklySchedule: weekdaySchedule<T>[];
-    holidays: HolidayConfigType<T>[];
+    weeklySchedule: weekdaySchedule<S>[];
+    holidays: ((date: Date) => EnumValue<H> | null)[];
+    holidayToStatus: (holiday: EnumValue<H>, dateTime: Date) => EnumValue<S> | null;
 }
 
-export type HolidayConfigType<T extends EnumType<string>> = {
-    name: string
-    check: (date: Date) => EnumValue<T>
-}
+type EnumType = {
+    [key: string]: string | number;
+} & { [key: number]: string };
 
-type EnumType<T extends string | number> = {
-    [key: string]: T;
-};
-type EnumValue<T extends EnumType<string>> = T[keyof T];
+type EnumValue<T extends EnumType> = T[keyof T];
 
-export type HolidayType<T extends EnumType<string>> = {
+export type HolidayType<T extends EnumType> = {
     name: string;
     check: (date: Date) => EnumValue<T>;
 }
 
-export class Broker<T extends EnumType<string>> {
-    private config: BrokerConfig<T>;
+export class Broker<S extends EnumType, H extends EnumType> {
+    private config: BrokerConfig<S, H>;
 
-    constructor(config: BrokerConfig<T>) {
+    constructor(config: BrokerConfig<S, H>) {
         this.config = config;
     }
 
@@ -43,15 +38,19 @@ export class Broker<T extends EnumType<string>> {
         return hours * 60 + minutes;
     }
 
-    getStatus(date: Date): EnumValue<T>[] {
+    getOpenStatus(date: Date): EnumValue<S>[] | null {
         // Convert UTC input to broker's timezone
         const localDate = toZonedTime(date, this.config.timezone);
 
         // Check holidays
         for (const holiday of this.config.holidays) {
-            const holidayStatus = holiday.check(localDate);
+            const holidayStatus = holiday(localDate);
             if (holidayStatus) {
-                return [holidayStatus];
+                const status = this.config.holidayToStatus(holidayStatus, date);
+                if (status === null) {
+                    return null;
+                }
+                return [status];
             }
         }
 
@@ -59,7 +58,7 @@ export class Broker<T extends EnumType<string>> {
         const schedules = this.config.weeklySchedule.filter(s => s.day === dayOfWeek)
 
         if (schedules.length === 0) {
-            return [this.config.defaultStatus];
+            return null;
         }
 
         // Parse schedule times in broker's timezone
@@ -79,6 +78,6 @@ export class Broker<T extends EnumType<string>> {
             return matches;
         }
 
-        return [this.config.defaultStatus];
+        return null;
     }
 }

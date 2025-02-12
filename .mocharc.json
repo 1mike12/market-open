@@ -1,6 +1,6 @@
 {
   "spec": "**/*.test.ts",
-  "require": ["@swc-node/register"],
+  "require": ["@swc-node/register/esm-register"],
   "recursive": true,
   "timeout": 5000,
   "ignore": ["node_modules"]

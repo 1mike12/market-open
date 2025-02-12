@@ -4,7 +4,7 @@
   "type": "module",
   "license": "MS-PL",
   "scripts": {
-    "build": "swc src -d dist --config-file .swcrc",
+    "build": "tsc",
     "test": "mocha"
   },
   "devDependencies": {

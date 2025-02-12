@@ -13,14 +13,16 @@
     "noImplicitAny": false,
     /* options since we are using tsc to compile */
     //keep it as node otherwise we can't do import x from "y", and it needs to be from "y.js" which is dumb
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "module": "NodeNext",
     "outDir": "dist",
     // Strips all comments from TypeScript files when converting into JavaScript- you rarely read compiled code so this saves space
     "removeComments": true,
     // required for breakpoints in intellij to work
     "sourceMap": true,
-
+    "inlineSourceMap": false,
+    // add typescript type declaration files to the output
+    "declaration": true,
 
     // filenames can be imported case insensitively depending on the platform. force imports to match
     "forceConsistentCasingInFileNames": true,

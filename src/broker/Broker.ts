@@ -44,6 +44,7 @@ export class Broker<S extends EnumType, H extends EnumType> {
 
         // Check holidays
         for (const holiday of this.config.holidays) {
+            // if null, then this holiday does not apply
             const holidayStatus = holiday(localDate);
             if (holidayStatus) {
                 const status = this.config.holidayToStatus(holidayStatus, date);

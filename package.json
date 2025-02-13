@@ -13,12 +13,12 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.cjs",
       "require": "./dist/index.js"
     },
     "./brokers": {
       "types": "./dist/broker/examples/index.d.ts",
-      "import": "./dist/broker/examples/index.mjs",
+      "import": "./dist/broker/examples/index.cjs",
       "require": "./dist/broker/examples/index.js"
     }
   },

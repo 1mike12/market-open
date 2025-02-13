@@ -7,18 +7,19 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "npm run build",
-    "build": "npm run clean && npx tsc",
-    "clean": "rimraf dist",
+    "build": "tsup",
     "test": "mocha"
   },
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./brokers": {
-      "import": "./dist/broker/examples/index.js",
-      "types": "./dist/broker/examples/index.d.ts"
+      "types": "./dist/broker/examples/index.d.ts",
+      "import": "./dist/broker/examples/index.mjs",
+      "require": "./dist/broker/examples/index.js"
     }
   },
   "devDependencies": {
@@ -30,6 +31,7 @@
     "chai": "^4.3.7",
     "mocha": "^10.2.0",
     "rimraf": "^6.0.1",
+    "tsup": "^8.3.6",
     "typescript": "^5.0.0"
   },
   "dependencies": {

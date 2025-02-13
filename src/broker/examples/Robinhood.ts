@@ -31,7 +31,7 @@ for (let i = 1; i <= 5; i++) {
     })
 }
 
-const RobinhoodConfig: BrokerConfig<typeof RobinhoodStatus, typeof HolidayStatus> = {
+export const RobinhoodConfig: BrokerConfig<typeof RobinhoodStatus, typeof HolidayStatus> = {
     name: "Robinhood",
     timezone: "America/New_York",
     holidayToStatus: (holiday: HolidayStatus, dateTime: Date) => {

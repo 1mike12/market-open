@@ -1,7 +1,9 @@
 import {format, toZonedTime,} from "date-fns-tz";
 import {timeToMinutes} from "../date_utils/stringTimeToMinutes";
+import type {EnumType} from "../types/EnumType";
+import type {EnumValue} from "../types/EnumValue";
 
-type weekdaySchedule<T extends EnumType> = {
+export type WeekdaySchedule<T extends EnumType> = {
     day: number;
     type: EnumValue<T>;
     start: string;
@@ -11,20 +13,9 @@ type weekdaySchedule<T extends EnumType> = {
 export type BrokerConfig<S extends EnumType, H extends EnumType> = {
     name: string;
     timezone: string;
-    weeklySchedule: weekdaySchedule<S>[];
+    weeklySchedule: WeekdaySchedule<S>[];
     holidays: ((date: Date) => EnumValue<H> | null)[];
     holidayToStatus: (holiday: EnumValue<H>, dateTime: Date) => EnumValue<S> | null;
-}
-
-type EnumType = {
-    [key: string]: string | number;
-} & { [key: number]: string };
-
-type EnumValue<T extends EnumType> = T[keyof T];
-
-export type HolidayType<T extends EnumType> = {
-    name: string;
-    check: (date: Date) => EnumValue<T>;
 }
 
 export class Broker<S extends EnumType, H extends EnumType> {

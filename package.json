@@ -1,11 +1,25 @@
 {
   "name": "node22-boilerplate",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "type": "module",
   "license": "MS-PL",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "prepare": "npm run build",
+    "build": "npm run clean && npx tsc",
+    "clean": "rimraf dist",
     "test": "mocha"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./brokers": {
+      "import": "./dist/broker/examples/index.js",
+      "types": "./dist/broker/examples/index.d.ts"
+    }
   },
   "devDependencies": {
     "@swc-node/register": "^1.10.9",
@@ -15,6 +29,7 @@
     "@types/mocha": "^10.0.10",
     "chai": "^4.3.7",
     "mocha": "^10.2.0",
+    "rimraf": "^6.0.1",
     "typescript": "^5.0.0"
   },
   "dependencies": {

@@ -1,3 +1,1 @@
-export type EnumType = {
-    [key: string]: string | number;
-} & { [key: number]: string };
+export type EnumType = Record<string, string | number>

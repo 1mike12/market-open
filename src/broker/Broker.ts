@@ -35,70 +35,88 @@ export class Broker<S extends EnumType, H extends EnumType> {
         return this.getOpenStatus(date) !== null;
     }
 
-    getOpenStatus(date: Date): EnumValue<S>[] | null {
-        // Convert UTC input to broker's timezone
-        const localDate = toZonedTime(date, this.config.timezone);
+    private convertToLocalTime(date: Date): Date {
+        return toZonedTime(date, this.config.timezone);
+    }
 
-        // Parse schedule times in broker's timezone
+    private getCurrentTimeInfo(localDate: Date) {
         const currentTime = format(localDate, 'HH:mm', {timeZone: this.config.timezone});
         const currentMinutes = timeToMinutes(currentTime);
         const dayOfWeek = localDate.getDay();
+        
+        return { currentTime, currentMinutes, dayOfWeek };
+    }
 
-        // Check holidays
+    private getHolidayStatus(localDate: Date): [EnumValue<H>, EnumValue<S> | null] | null {
         for (const holiday of this.config.holidays) {
             const holidayStatus = holiday(localDate);
             if (holidayStatus) {
-                const sessionType = this.config.holidayToStatus(holidayStatus, date);
+                const sessionType = this.config.holidayToStatus(holidayStatus, localDate);
+                return [holidayStatus, sessionType];
+            }
+        }
+        return null;
+    }
 
-                // If session is null, market is closed regardless of time
-                if (sessionType === null) {
-                    return null;
-                }
+    private isTimeInSchedule(schedule: WeekdaySchedule<S>, currentMinutes: number): boolean {
+        const startMinutes = timeToMinutes(schedule.start);
+        const endMinutes = timeToMinutes(schedule.end);
+        return currentMinutes >= startMinutes && currentMinutes < endMinutes;
+    }
 
-                // For holiday sessions, still respect the time schedule
-                const schedules = this.config.weeklySchedule.filter(s =>
-                    s.day === dayOfWeek && s.type === sessionType
-                );
+    private getMatchingSchedules(dayOfWeek: number, sessionType?: EnumValue<S>): WeekdaySchedule<S>[] {
+        if (sessionType) {
+            return this.config.weeklySchedule.filter(s => 
+                s.day === dayOfWeek && s.type === sessionType
+            );
+        }
+        
+        return this.config.weeklySchedule.filter(s => s.day === dayOfWeek);
+    }
 
-                if (schedules.length === 0) {
-                    return null;
-                }
+    private getActiveSessionTypes(schedules: WeekdaySchedule<S>[], currentMinutes: number): EnumValue<S>[] {
+        const matches: EnumValue<S>[] = [];
+        for (const schedule of schedules) {
+            if (this.isTimeInSchedule(schedule, currentMinutes)) {
+                matches.push(schedule.type);
+            }
+        }
+        return matches;
+    }
 
-                // Check if current time is within any matching schedule
-                for (const schedule of schedules) {
-                    const startMinutes = timeToMinutes(schedule.start);
-                    const endMinutes = timeToMinutes(schedule.end);
-
-                    if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
-                        return [sessionType];
-                    }
-                }
-
+    getOpenStatus(date: Date): EnumValue<S>[] | null {
+        const localDate = this.convertToLocalTime(date);
+        const { currentMinutes, dayOfWeek } = this.getCurrentTimeInfo(localDate);
+        const holidayResult = this.getHolidayStatus(localDate);
+        
+        if (holidayResult) {
+            const [, sessionType] = holidayResult;
+            
+            // If holiday session is null, market is closed regardless of time
+            if (sessionType === null) {
                 return null;
             }
+
+            // For holiday sessions, still respect the time schedule
+            const schedules = this.getMatchingSchedules(dayOfWeek, sessionType);
+
+            if (schedules.length === 0) {
+                return null;
+            }
+
+            // Check if current time is within any matching schedule
+            const matches = this.getActiveSessionTypes(schedules, currentMinutes);
+            return matches.length > 0 ? [sessionType] : null;
         }
 
         // Regular weekday logic (non-holiday)
-        const schedules = this.config.weeklySchedule.filter(s => s.day === dayOfWeek);
+        const schedules = this.getMatchingSchedules(dayOfWeek);
 
         if (schedules.length === 0) {
             return null;
         }
 
-        const matches = [];
-        for (const schedule of schedules) {
-            const startMinutes = timeToMinutes(schedule.start);
-            const endMinutes = timeToMinutes(schedule.end);
-
-            if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
-                matches.push(schedule.type);
-            }
-        }
-
-        if (matches.length > 0) {
-            return matches;
-        }
-
-        return null;
+        const matches = this.getActiveSessionTypes(schedules, currentMinutes);
+        return matches.length > 0 ? matches : null;
     }
 }

@@ -1,5 +1,4 @@
 import {format, toZonedTime} from "date-fns-tz";
-import {timeToMinutes} from "../date_utils/stringTimeToMinutes";
 import type {EnumType} from "../types/EnumType";
 import type {EnumValue} from "../types/EnumValue";
 import {Schedule} from "../helpers/Schedule";
@@ -47,12 +46,10 @@ export class Broker<S extends EnumType, H extends EnumType> {
     return this.getOpenStatuses(date) !== null;
   }
 
-  private getCurrentTimeInfo(localDate: Date) {
-    // Format the time in the broker's timezone
-    const currentTime = format(localDate, 'HH:mm', {timeZone: this.timezone});
-    const currentMinutes = timeToMinutes(currentTime);
+  private getTimeInfo(localDate: Date) {
+    const currentMinutes = localDate.getHours() * 60 + localDate.getMinutes()
     const dayOfWeek = localDate.getDay()
-    return {currentTime, currentMinutes, dayOfWeek};
+    return {currentMinutes, dayOfWeek};
   }
 
   private getHolidaySession(localDate: Date) {
@@ -68,7 +65,7 @@ export class Broker<S extends EnumType, H extends EnumType> {
 
   getOpenStatuses(systemDate: Date) {
     const localHourAndMinutes = toZonedTime(systemDate, this.timezone)
-    const {currentMinutes, dayOfWeek} = this.getCurrentTimeInfo(localHourAndMinutes);
+    const {currentMinutes, dayOfWeek} = this.getTimeInfo(localHourAndMinutes);
     const {holidayStatus, holidaySession} = this.getHolidaySession(localHourAndMinutes);
 
     if (holidayStatus) {

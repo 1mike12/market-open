@@ -1,6 +1,6 @@
 src/
 .gitignore
-.mocharc.json
+.mocharc.js
 .swc/
 node_modules/
 .swcrc

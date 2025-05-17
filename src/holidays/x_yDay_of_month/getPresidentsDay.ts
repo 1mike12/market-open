@@ -1,6 +1,6 @@
 import {isNthDayOfMonth} from "./isNthDayOfMonth";
-import {HolidayStatus} from "../HolidayStatus";
+import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
 
 export function getPresidentsDay(date: Date) {
-    return isNthDayOfMonth(date, 2, 3, 1) ? HolidayStatus.CLOSED : null;
+    return isNthDayOfMonth(date, 2, 3, 1) ? NYSE_HolidayStatus.CLOSED : null;
 }

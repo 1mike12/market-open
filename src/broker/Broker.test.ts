@@ -2,11 +2,7 @@ import {expect} from 'chai';
 import {Broker} from './Broker';
 import {nyse_basic_brokerage} from "./test_configs/nyse_basic_brokerage";
 import {all_open_brokerage_except_new_years} from "./test_configs/all_open_brokerage_except_new_years";
-
-enum Status {
-    OPEN = "OPEN",
-    CLOSED = "CLOSED",
-}
+import {NYSE_SessionType} from "../enums/NYSE_SessionType";
 
 const mondayAtNoon = new Date('2021-01-04T17:00:00Z');
 const mondayAfterClose = new Date('2021-01-04T21:00:00Z');
@@ -17,7 +13,9 @@ describe('HolidayType', () => {
         it("should be closed on New Year's Day and open any other time", () => {
             const broker = new Broker(all_open_brokerage_except_new_years);
             // in 2024, january 1st was a monday
-            expect(broker.getOpenStatus(new Date('2024-01-01T17:00:00Z'))).deep.equal(null);
+            const openStatus = broker.getOpenStatus(new Date('2024-01-01T17:00:00Z'))
+
+            expect(openStatus).equal(null);
         })
     })
 
@@ -30,7 +28,7 @@ describe('HolidayType', () => {
                 openTimes.forEach(time => {
                     // Construct a NYC time (Eastern Time) date
                     const nycDate = new Date(`2018-01-0${i}T${time}:00-05:00`);
-                    expect(broker.getOpenStatus(nycDate)).deep.equal([Status.OPEN]);
+                    expect(broker.getOpenStatus(nycDate)).deep.equal([NYSE_SessionType.NORMAL]);
                 });
             }
         });

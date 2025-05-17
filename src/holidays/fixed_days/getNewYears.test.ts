@@ -1,13 +1,13 @@
 import {expect} from "chai";
 import {getNewYears} from "./getNewYears";
-import {HolidayStatus} from "../HolidayStatus";
+import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
 import {parseISO} from 'date-fns';
 
 describe("isClosedForNewYears", () => {
 
     it("should return true for New Year's Day", () => {
         const newYearsDay = parseISO('2025-01-01T12:00:00-05:00');
-        expect(getNewYears(newYearsDay)).equal(HolidayStatus.CLOSED);
+        expect(getNewYears(newYearsDay)).equal(NYSE_HolidayStatus.CLOSED);
     });
 
     it("should return false for the Friday before if New Year's Day is on a Saturday", () => {
@@ -17,7 +17,7 @@ describe("isClosedForNewYears", () => {
 
     it("should return true for January 2 if New Year's Day is on a Sunday", () => {
         const dayAfterNewYears = parseISO('2023-01-02T12:00:00-05:00'); // New Year's Day on Sunday
-        expect(getNewYears(dayAfterNewYears)).equal(HolidayStatus.CLOSED);
+        expect(getNewYears(dayAfterNewYears)).equal(NYSE_HolidayStatus.CLOSED);
     });
 
     it("should return false for January 2 if New Year's Day is not on a Sunday", () => {

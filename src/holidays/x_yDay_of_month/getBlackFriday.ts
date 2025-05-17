@@ -1,4 +1,4 @@
-import {HolidayStatus} from "../HolidayStatus";
+import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
 import {isNthDayOfMonth} from "./isNthDayOfMonth";
 
 /**
@@ -6,5 +6,5 @@ import {isNthDayOfMonth} from "./isNthDayOfMonth";
  * @param date
  */
 export function getBlackFriday(date: Date) {
-     return isNthDayOfMonth(date, 11, 5, 4) ? HolidayStatus.HALF_DAY : null;
+     return isNthDayOfMonth(date, 11, 5, 4) ? NYSE_HolidayStatus.HALF_DAY : null;
 }

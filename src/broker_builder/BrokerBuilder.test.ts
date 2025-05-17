@@ -15,7 +15,7 @@ enum TestHoliday {
 
 describe('BrokerBuilder', () => {
   it('builds a broker that is open during defined hours', () => {
-    const broker = new BrokerBuilder<TestSession, TestHoliday>()
+    const broker = new BrokerBuilder()
     .name('TestBroker')
     .timeZone('UTC')
     .schedules({
@@ -34,7 +34,7 @@ describe('BrokerBuilder', () => {
   });
 
   it('is closed outside of defined hours', () => {
-    const broker = new BrokerBuilder<TestSession, TestHoliday>()
+    const broker = new BrokerBuilder()
     .name('TestBroker')
     .timeZone('UTC')
     .schedules({
@@ -57,7 +57,7 @@ describe('BrokerBuilder', () => {
   });
 
   it('can have different holiday behavior for regular and CLOSED holiday types', () => {
-    const broker = new BrokerBuilder<TestSession, TestHoliday>()
+    const broker = new BrokerBuilder()
     .name('HolidayBroker')
     .timeZone('UTC')
     .schedules({

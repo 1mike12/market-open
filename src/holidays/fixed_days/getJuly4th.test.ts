@@ -1,18 +1,18 @@
 import {expect} from "chai";
 import {getJuly4th} from "./getJuly4th";
-import {HolidayStatus} from "../HolidayStatus";
+import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
 import {parseISO} from 'date-fns';
 
 describe("isClosedForJuly4th", () => {
 
     it("should return true for July 4th", () => {
         const july4th = parseISO('2023-07-04T12:00:00-04:00');
-        expect(getJuly4th(july4th)).equal(HolidayStatus.CLOSED);
+        expect(getJuly4th(july4th)).equal(NYSE_HolidayStatus.CLOSED);
     });
 
     it("should return true for July 3rd if July 4th is on a Saturday", () => {
         const july3rd = parseISO('2020-07-03T12:00:00-04:00'); // July 4th on Saturday
-        expect(getJuly4th(july3rd)).equal(HolidayStatus.CLOSED);
+        expect(getJuly4th(july3rd)).equal(NYSE_HolidayStatus.CLOSED);
     });
 
     it("should return false for July 3rd if July 4th is not on a Saturday", () => {
@@ -22,7 +22,7 @@ describe("isClosedForJuly4th", () => {
 
     it("should return true for July 5th if July 4th is on a Sunday", () => {
         const july5th = parseISO('2021-07-05T12:00:00-04:00'); // July 4th on Sunday
-        expect(getJuly4th(july5th)).equal(HolidayStatus.CLOSED);
+        expect(getJuly4th(july5th)).equal(NYSE_HolidayStatus.CLOSED);
     });
 
     it("should return false for July 5th if July 4th is not on a Sunday", () => {

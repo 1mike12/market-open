@@ -1,0 +1,5 @@
+export enum NYSE_SessionType{
+  PREMARKET= "PREMARKET",
+  NORMAL= "NORMAL",
+  POSTMARKET= "POSTMARKET"
+}

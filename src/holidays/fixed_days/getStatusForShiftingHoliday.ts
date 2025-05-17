@@ -1,5 +1,5 @@
 import {isSameDay, subDays, addDays, getDay, getMonth, getDate, getYear} from 'date-fns';
-import {HolidayStatus} from "../HolidayStatus";
+import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
 
 /**
  * Determines holiday status for calendar holidays (like New Year's, Christmas, July 4th).
@@ -23,7 +23,7 @@ export function getStatusForShiftingHoliday(
     date: Date,
     month: number,
     holidayDayOfMonth: number,
-): HolidayStatus | null {
+): NYSE_HolidayStatus | null {
     const holidayDate = new Date(getYear(date), month - 1, holidayDayOfMonth);
     const holidayDayOfWeek = getDay(holidayDate);
 
@@ -32,22 +32,22 @@ export function getStatusForShiftingHoliday(
     // and will occur the day before
     if (isTuesdayThroughFriday(holidayDayOfWeek)) {
         if(isSameDay(date, subDays(holidayDate, 1))) {
-              return HolidayStatus.HALF_DAY;
+              return NYSE_HolidayStatus.HALF_DAY;
         }
     }
 
     // Is it the actual holiday date?
     if (getMonth(date) + 1 === month && getDate(date) === holidayDayOfMonth) {
-        return HolidayStatus.CLOSED;
+        return NYSE_HolidayStatus.CLOSED;
     }
 
     // Is it the Monday after a Sunday holiday?
     if (holidayDayOfWeek === 0 && isSameDay(date, addDays(holidayDate, 1))) {
-        return HolidayStatus.CLOSED;
+        return NYSE_HolidayStatus.CLOSED;
     }
     // Is it the Friday before a Saturday holiday?
     if (holidayDayOfWeek === 6 && isSameDay(date, subDays(holidayDate, 1))) {
-        return HolidayStatus.CLOSED;
+        return NYSE_HolidayStatus.CLOSED;
     }
 
     // Any other date is not affected by this holiday

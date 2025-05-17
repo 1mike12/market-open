@@ -1,5 +1,5 @@
 import {getLastWeekdayOfMonth} from "./getLastWeekdayOfMonth";
-import {HolidayStatus} from "../HolidayStatus";
+import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
 import {getMonth, getYear, getDate} from 'date-fns';
 
 export function getMemorialDay(nycDate: Date) {
@@ -8,5 +8,5 @@ export function getMemorialDay(nycDate: Date) {
     }
     const lastDay = getLastWeekdayOfMonth(1, 5, getYear(nycDate));
     const dayOfMonth = getDate(nycDate);
-    return dayOfMonth === lastDay ? HolidayStatus.CLOSED : null;
+    return dayOfMonth === lastDay ? NYSE_HolidayStatus.CLOSED : null;
 }

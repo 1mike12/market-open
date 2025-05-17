@@ -1,5 +1,5 @@
 import {isNthDayOfMonth} from "./isNthDayOfMonth";
-import {HolidayStatus} from "../HolidayStatus";
+import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
 import {getMonth} from 'date-fns';
 
 export function getThanksgiving(date: Date) {
@@ -7,5 +7,5 @@ export function getThanksgiving(date: Date) {
     if (getMonth(date) + 1 !== 11) { // getMonth returns 0-based month
         return null;
     }
-    return isNthDayOfMonth(date, 11, 4, 4) ? HolidayStatus.CLOSED : null;
+    return isNthDayOfMonth(date, 11, 4, 4) ? NYSE_HolidayStatus.CLOSED : null;
 }

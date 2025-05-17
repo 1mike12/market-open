@@ -1,46 +1,44 @@
 import type {BrokerConfig} from "../Broker";
-import {HolidayStatus} from "../../holidays/HolidayStatus";
+import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
+import {NYSE_SessionType} from "../../enums/NYSE_SessionType";
 
-enum Status {
-    OPEN = "OPEN",
-    CLOSED = "CLOSED",
-}
-
-export const nyse_basic_brokerage: BrokerConfig<typeof Status, typeof HolidayStatus> = {
-    name: "NYSE",
-    timezone: "America/New_York",
-    holidayToStatus: () => Status.OPEN,
-    weeklySchedule: [
-         {
-            day: 1,
-            type: Status.OPEN,
-            start: "09:30",
-            end: "16:00"
-        },
-         {
-            day: 2,
-            type: Status.OPEN,
-            start: "09:30",
-            end: "16:00"
-        },
-        {
-            day: 3,
-            type: Status.OPEN,
-            start: "09:30",
-            end: "16:00"
-        },
-         {
-            day: 4,
-            type: Status.OPEN,
-            start: "09:30",
-            end: "16:00"
-        },
-         {
-            day: 5,
-            type: Status.OPEN,
-            start: "09:30",
-            end: "16:00"
-        }
-    ],
-    holidays: []
+export const nyse_basic_brokerage: BrokerConfig<typeof NYSE_SessionType, typeof NYSE_HolidayStatus> = {
+  name: "NYSE",
+  holidayEnum: NYSE_HolidayStatus,
+  sessionEnum: NYSE_SessionType,
+  timezone: "America/New_York",
+  holidayToStatus: () => NYSE_SessionType.NORMAL,
+  weeklySchedule: [
+    {
+      day: 1,
+      type: NYSE_SessionType.NORMAL,
+      start: "09:30",
+      end: "16:00"
+    },
+    {
+      day: 2,
+      type: NYSE_SessionType.NORMAL,
+      start: "09:30",
+      end: "16:00"
+    },
+    {
+      day: 3,
+      type: NYSE_SessionType.NORMAL,
+      start: "09:30",
+      end: "16:00"
+    },
+    {
+      day: 4,
+      type: NYSE_SessionType.NORMAL,
+      start: "09:30",
+      end: "16:00"
+    },
+    {
+      day: 5,
+      type: NYSE_SessionType.NORMAL,
+      start: "09:30",
+      end: "16:00"
+    }
+  ],
+  holidays: []
 }

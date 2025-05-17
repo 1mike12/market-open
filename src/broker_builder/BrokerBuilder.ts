@@ -20,6 +20,8 @@ export type HolidayToSessionFunction<S extends EnumType,H extends EnumType> = (h
 export class BrokerBuilder<S extends EnumType, H extends EnumType> {
   // Use EnumObject<S> and EnumObject<H> as the actual enum types
   public cfg: BrokerConfig<S, H> = {
+    sessionEnum: null,
+    holidayEnum: null,
     timezone: "",
     name: "",
     weeklySchedule: [],

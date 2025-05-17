@@ -1,5 +1,5 @@
 import {isNthDayOfMonth} from "./isNthDayOfMonth";
-import {HolidayStatus} from "../HolidayStatus";
+import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
 import {getMonth} from 'date-fns';
 
 export function getMartinLutherKingDay(date: Date) {
@@ -7,7 +7,7 @@ export function getMartinLutherKingDay(date: Date) {
         return null;
     }
     if (isNthDayOfMonth(date, 1, 3, 1)) {
-        return HolidayStatus.CLOSED;
+        return NYSE_HolidayStatus.CLOSED;
     }
     return null;
 }

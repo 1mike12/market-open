@@ -1,6 +1,5 @@
 import {expect} from "chai";
 import {Schedule} from "./Schedule";
-import {type WeekdaySchedule} from "../broker/Broker";
 
 describe("Schedules", () => {
 
@@ -10,22 +9,22 @@ describe("Schedules", () => {
     OPEN = "OPEN"
   }
 
-  const schedules: WeekdaySchedule<typeof Test>[] = [
+  const schedules = [
     {
       day: 1,
-      type: Test.OPEN,
+      data: Test.OPEN,
       start: "9:00",
       end: "16:00"
     },
     {
       day: 3,
-      type: Test.PREMARKET,
+      data: Test.PREMARKET,
       start: "4:00",
       end: "09:00"
     },
     {
       day: 3,
-      type: Test.PREMARKET2,
+      data: Test.PREMARKET2,
       start: "4:00",
       end: "09:00"
     }

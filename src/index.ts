@@ -6,3 +6,4 @@ export * from "./broker/examples/Robinhood";
 export * from "./broker_builder/examples/Alpaca";
 export * from "./broker_builder/examples/Tradier";
 export * from "./date_utils";
+export {getActiveSessionTypes} from "./helpers/Schedule";

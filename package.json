@@ -1,6 +1,6 @@
 {
   "name": "market-open",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "commonjs",
   "license": "MS-PL",
   "main": "dist/index.js",

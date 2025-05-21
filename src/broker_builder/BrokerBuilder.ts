@@ -1,12 +1,15 @@
-import {Broker, type BrokerConfig} from "../broker/Broker";
-import type {EnumValue} from "../types/EnumValue";
-import type {EnumType} from "../types/EnumType";
+import { Broker, type BrokerConfig } from "../broker/Broker"
+import type { EnumType } from "../types/EnumType"
+import type { EnumValue } from "../types/EnumValue"
 
 /**
  * Helper type to get the enum type from enum values
  */
-export type DateToHolidayFunction<H extends EnumType> = (d: Date) => EnumValue<H>| null
-export type HolidayToSessionFunction<S extends EnumType,H extends EnumType> = (h: EnumValue<H>, dt: Date) => EnumValue<S> | null
+export type DateToHolidayFunction<H extends EnumType> = (d: Date) => EnumValue<H> | null
+export type HolidayToSessionFunction<S extends EnumType, H extends EnumType> = (
+  h: EnumValue<H>,
+  dt: Date
+) => EnumValue<S> | null
 
 /**
  * A fluent builder for BrokerConfig<S,H>, letting you define
@@ -26,20 +29,25 @@ export class BrokerBuilder<S extends EnumType, H extends EnumType> {
     name: "",
     weeklySchedule: [],
     holidays: [],
-    holidayToStatus: (_holidayType : EnumValue<H>, _date : Date) => null,
-  };
-
+    holidayToStatus: (_holidayType: EnumValue<H>, _date: Date) => null
+  }
 
   /** Set broker name */
-  name(name: string) { this.cfg.name = name; return this; }
+  name(name: string) {
+    this.cfg.name = name
+    return this
+  }
   /** Set IANA timezone */
-  timeZone(tz: string) { this.cfg.timezone = tz; return this; }
+  timeZone(tz: string) {
+    this.cfg.timezone = tz
+    return this
+  }
 
   /** Configure all schedules at once with a day-based configuration object */
-  schedules(config: Record<string, Array<{type: EnumValue<S>, start: string, end: string}>>) {
+  schedules(config: Record<string, Array<{ type: EnumValue<S>; start: string; end: string }>>) {
     for (const daySpec in config) {
-      const dayNumbers = parseDaySpec(daySpec);
-      const sessions = config[daySpec];
+      const dayNumbers = parseDaySpec(daySpec)
+      const sessions = config[daySpec]
 
       for (const day of dayNumbers) {
         for (const session of sessions) {
@@ -47,38 +55,38 @@ export class BrokerBuilder<S extends EnumType, H extends EnumType> {
             day,
             type: session.type,
             start: session.start,
-            end: session.end,
-          });
+            end: session.end
+          })
         }
       }
     }
-    return this;
+    return this
   }
 
   /** Register a holiday-detection fn: Date → holiday enum or null */
   withHolidayFn(fn: DateToHolidayFunction<H> | DateToHolidayFunction<H>[]) {
-    if (Array.isArray(fn)){
-      for (const f of fn){
+    if (Array.isArray(fn)) {
+      for (const f of fn) {
         this.cfg.holidays.push(f)
       }
       return this
     }
-    this.cfg.holidays.push(fn);
-    return this;
+    this.cfg.holidays.push(fn)
+    return this
   }
 
   /** Map detected holiday → session type (or null for closed) */
-  withHolidayStatusMapper(fn: HolidayToSessionFunction<S,H>) {
-    this.cfg.holidayToStatus = fn;
-    return this;
+  withHolidayStatusMapper(fn: HolidayToSessionFunction<S, H>) {
+    this.cfg.holidayToStatus = fn
+    return this
   }
 
   /** Finalize into a Broker<S,H> */
   build() {
     if (!this.cfg.name || !this.cfg.timezone) {
-      throw new Error("BrokerBuilder: name and timezone must be set");
+      throw new Error("BrokerBuilder: name and timezone must be set")
     }
-    return new Broker(this.cfg);
+    return new Broker(this.cfg)
   }
 }
 
@@ -86,14 +94,14 @@ export class BrokerBuilder<S extends EnumType, H extends EnumType> {
  * Parse numbers, arrays, or strings like "Mon–Fri" into weekday numbers (0=Sun)
  */
 function parseDaySpec(spec: number | number[] | string): number[] {
-  if (typeof spec === "number") return [spec];
-  if (Array.isArray(spec)) return spec;
-  const map: Record<string,number> = { Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6 };
-  const [start, end] = spec.split("-").map(s => s.trim().slice(0,3));
-  const from = map[start], to = map[end];
-  const out: number[] = [];
-  for (let d = from; d <= to; d++) out.push(d);
-  return out;
+  if (typeof spec === "number") return [spec]
+  if (Array.isArray(spec)) return spec
+  const map: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }
+  const [start, end] = spec.split("-").map(s => s.trim().slice(0, 3))
+  const from = map[start], to = map[end]
+  const out: number[] = []
+  for (let d = from; d <= to; d++) out.push(d)
+  return out
 }
 
 // Usage example:

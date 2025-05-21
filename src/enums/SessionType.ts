@@ -1,3 +1,3 @@
 export enum SessionType {
-  OPEN = "OPEN",
+  OPEN = "OPEN"
 }

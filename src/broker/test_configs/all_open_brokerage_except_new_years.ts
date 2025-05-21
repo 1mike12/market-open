@@ -1,6 +1,6 @@
-import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
-import type {BrokerConfig} from "../Broker";
-import {NYSE_SessionType} from "../../enums/NYSE_SessionType";
+import { NYSE_HolidayStatus } from "../../enums/NYSE_HolidayStatus"
+import { NYSE_SessionType } from "../../enums/NYSE_SessionType"
+import type { BrokerConfig } from "../Broker"
 
 export const all_open_brokerage_except_new_years: BrokerConfig<typeof NYSE_SessionType, typeof NYSE_HolidayStatus> = {
   sessionEnum: NYSE_SessionType,
@@ -9,12 +9,12 @@ export const all_open_brokerage_except_new_years: BrokerConfig<typeof NYSE_Sessi
   timezone: "America/New_York",
   holidayToStatus: (holiday: NYSE_HolidayStatus, dateTime: Date) => {
     if (holiday === NYSE_HolidayStatus.HALF_DAY) {
-      const hour = dateTime.getHours();
+      const hour = dateTime.getHours()
       if (hour >= 9 && hour < 13) {
-        return NYSE_SessionType.NORMAL;
+        return NYSE_SessionType.NORMAL
       }
     }
-    return null;
+    return null
   },
   weeklySchedule: [
     {
@@ -51,34 +51,34 @@ export const all_open_brokerage_except_new_years: BrokerConfig<typeof NYSE_Sessi
   ],
   holidays: [
     (date: Date) => {
-      const month = date.getMonth();
-      const dayOfMonth = date.getDate();
-      const dayOfWeek = date.getDay();
+      const month = date.getMonth()
+      const dayOfMonth = date.getDate()
+      const dayOfWeek = date.getDay()
 
       // Handle New Year's Day (January 1st)
       if (month === 0 && dayOfMonth === 1) {
         // If it's a weekend, the holiday is observed on a different day
         if (dayOfWeek === 0 || dayOfWeek === 6) {
-          return NYSE_HolidayStatus.CLOSED; // Still closed on actual New Year's Day
+          return NYSE_HolidayStatus.CLOSED // Still closed on actual New Year's Day
         }
-        return NYSE_HolidayStatus.CLOSED;
+        return NYSE_HolidayStatus.CLOSED
       }
 
       // Handle December 31st (New Year's Eve)
       if (month === 11 && dayOfMonth === 31) {
         // Get next day (January 1st)
-        const nextDay = new Date(date);
-        nextDay.setDate(date.getDate() + 1);
-        const newYearsDayOfWeek = nextDay.getDay();
+        const nextDay = new Date(date)
+        nextDay.setDate(date.getDate() + 1)
+        const newYearsDayOfWeek = nextDay.getDay()
 
         // If New Year's Day is on Saturday, Friday Dec 31st is closed
         if (newYearsDayOfWeek === 6) {
-          return NYSE_HolidayStatus.CLOSED;
+          return NYSE_HolidayStatus.CLOSED
         }
 
         // If New Year's Day is on a weekday (not weekend), Dec 31st is half day
         if (newYearsDayOfWeek !== 0) { // not Sunday
-          return NYSE_HolidayStatus.HALF_DAY;
+          return NYSE_HolidayStatus.HALF_DAY
         }
 
         // Otherwise (New Year's Day is Sunday), Dec 31st is normal day
@@ -88,10 +88,10 @@ export const all_open_brokerage_except_new_years: BrokerConfig<typeof NYSE_Sessi
       // Handle January 2nd
       if (month === 0 && dayOfMonth === 2) {
         // If January 1st was a Sunday, Monday January 2nd is closed
-        const newYearsDay = new Date(date);
-        newYearsDay.setDate(date.getDate() - 1);
+        const newYearsDay = new Date(date)
+        newYearsDay.setDate(date.getDate() - 1)
         if (newYearsDay.getDay() === 0) {
-          return NYSE_HolidayStatus.CLOSED;
+          return NYSE_HolidayStatus.CLOSED
         }
       }
 

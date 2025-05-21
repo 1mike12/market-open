@@ -1,5 +1,5 @@
-import {isSameDay, subDays, addDays, getDay, getMonth, getDate, getYear} from 'date-fns';
-import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
+import { addDays, getDate, getDay, getMonth, getYear, isSameDay, subDays } from "date-fns"
+import { NYSE_HolidayStatus } from "../../enums/NYSE_HolidayStatus"
 
 /**
  * Determines holiday status for calendar holidays (like New Year's, Christmas, July 4th).
@@ -20,40 +20,40 @@ import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
  * All other dates: null
  */
 export function getStatusForShiftingHoliday(
-    date: Date,
-    month: number,
-    holidayDayOfMonth: number,
+  date: Date,
+  month: number,
+  holidayDayOfMonth: number
 ): NYSE_HolidayStatus | null {
-    const holidayDate = new Date(getYear(date), month - 1, holidayDayOfMonth);
-    const holidayDayOfWeek = getDay(holidayDate);
+  const holidayDate = new Date(getYear(date), month - 1, holidayDayOfMonth)
+  const holidayDayOfWeek = getDay(holidayDate)
 
-    // Check half-day first to return faster
-    // Half day happens if holiday occurs on Tuesday through Friday
-    // and will occur the day before
-    if (isTuesdayThroughFriday(holidayDayOfWeek)) {
-        if(isSameDay(date, subDays(holidayDate, 1))) {
-              return NYSE_HolidayStatus.HALF_DAY;
-        }
+  // Check half-day first to return faster
+  // Half day happens if holiday occurs on Tuesday through Friday
+  // and will occur the day before
+  if (isTuesdayThroughFriday(holidayDayOfWeek)) {
+    if (isSameDay(date, subDays(holidayDate, 1))) {
+      return NYSE_HolidayStatus.HALF_DAY
     }
+  }
 
-    // Is it the actual holiday date?
-    if (getMonth(date) + 1 === month && getDate(date) === holidayDayOfMonth) {
-        return NYSE_HolidayStatus.CLOSED;
-    }
+  // Is it the actual holiday date?
+  if (getMonth(date) + 1 === month && getDate(date) === holidayDayOfMonth) {
+    return NYSE_HolidayStatus.CLOSED
+  }
 
-    // Is it the Monday after a Sunday holiday?
-    if (holidayDayOfWeek === 0 && isSameDay(date, addDays(holidayDate, 1))) {
-        return NYSE_HolidayStatus.CLOSED;
-    }
-    // Is it the Friday before a Saturday holiday?
-    if (holidayDayOfWeek === 6 && isSameDay(date, subDays(holidayDate, 1))) {
-        return NYSE_HolidayStatus.CLOSED;
-    }
+  // Is it the Monday after a Sunday holiday?
+  if (holidayDayOfWeek === 0 && isSameDay(date, addDays(holidayDate, 1))) {
+    return NYSE_HolidayStatus.CLOSED
+  }
+  // Is it the Friday before a Saturday holiday?
+  if (holidayDayOfWeek === 6 && isSameDay(date, subDays(holidayDate, 1))) {
+    return NYSE_HolidayStatus.CLOSED
+  }
 
-    // Any other date is not affected by this holiday
-    return null;
+  // Any other date is not affected by this holiday
+  return null
 }
 
-function isTuesdayThroughFriday (dayOfWeek: number) {
-    return dayOfWeek >= 2 && dayOfWeek <= 5;
+function isTuesdayThroughFriday(dayOfWeek: number) {
+  return dayOfWeek >= 2 && dayOfWeek <= 5
 }

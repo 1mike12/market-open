@@ -1,8 +1,7 @@
-import {expect} from "chai";
-import {Schedule} from "./Schedule";
+import { expect } from "chai"
+import { Schedule } from "./Schedule"
 
 describe("Schedules", () => {
-
   enum Test {
     PREMARKET = "PRE",
     PREMARKET2 = "PRE2",
@@ -34,7 +33,7 @@ describe("Schedules", () => {
   it("should be open", () => {
     expect(s.getSessions(1, 9 * 60)).deep.equal([Test.OPEN])
     expect(s.getSessions(1, 15 * 60)).deep.equal([Test.OPEN])
-  });
+  })
 
   it("shoud not be open when time is exactly the close time", () => {
     expect(s.getSessions(1, 16 * 60)).length(0)
@@ -47,4 +46,4 @@ describe("Schedules", () => {
   it("should get two sessions when sessions overlap", () => {
     expect(s.getSessions(3, 4 * 60)).deep.equal([Test.PREMARKET, Test.PREMARKET2])
   })
-});
+})

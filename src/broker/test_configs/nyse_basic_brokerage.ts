@@ -1,6 +1,6 @@
-import type {BrokerConfig} from "../Broker";
-import {NYSE_HolidayStatus} from "../../enums/NYSE_HolidayStatus";
-import {NYSE_SessionType} from "../../enums/NYSE_SessionType";
+import { NYSE_HolidayStatus } from "../../enums/NYSE_HolidayStatus"
+import { NYSE_SessionType } from "../../enums/NYSE_SessionType"
+import type { BrokerConfig } from "../Broker"
 
 export const nyse_basic_brokerage: BrokerConfig<typeof NYSE_SessionType, typeof NYSE_HolidayStatus> = {
   name: "NYSE",

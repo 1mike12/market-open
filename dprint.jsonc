@@ -1,0 +1,22 @@
+{
+  "lineWidth": 120,
+  "indentWidth": 2,
+  "useTabs": false,
+  "plugins": [
+    "https://plugins.dprint.dev/typescript-0.85.0.wasm",
+    "https://plugins.dprint.dev/json-0.20.0.wasm"
+  ],
+  "typescript": {
+    // automatic semicolon insertion. only if absolutely necessary
+    "semiColons": "asi",
+    "quoteStyle": "preferDouble",
+    "trailingCommas": "never"
+  },
+  "json": {
+    "indentWidth": 2,
+    "trailingCommas": "never"
+  },
+  "excludes": [
+    "**/*-lock.json"
+  ]
+}

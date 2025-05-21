@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-     /* Base Options: */
+    /* Base Options: */
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "ES2022",
@@ -12,7 +12,7 @@
     "strict": false,
     "noImplicitAny": false,
     /* options since we are using tsc to compile */
-    //keep it as node otherwise we can't do import x from "y", and it needs to be from "y.js" which is dumb
+    // keep it as node otherwise we can't do import x from "y", and it needs to be from "y.js" which is dumb
     "moduleResolution": "Node",
     "outDir": "dist",
     // Strips all comments from TypeScript files when converting into JavaScript- you rarely read compiled code so this saves space

@@ -1,18 +1,17 @@
-import {timeToMinutes} from "../date_utils/stringTimeToMinutes";
+import { timeToMinutes } from "../date_utils/stringTimeToMinutes"
 
 export type InputScheduleType<T> = {
-  day: number;
-  data: T;
-  start: string;
-  end: string;
+  day: number
+  data: T
+  start: string
+  end: string
 }
 
 type ScheduleType<T> = {
-  data: T;
-  startMinutes: number;
-  endMinutes: number;
+  data: T
+  startMinutes: number
+  endMinutes: number
 }
-
 
 /**
  * helper class to encapsulate schedules in the form of WeekdaySchedule
@@ -42,14 +41,14 @@ export class Schedule<T> {
   }
 
   getSessions(dayOfWeek: number, currentMinutes: number) {
-    const matches: T[] = [];
+    const matches: T[] = []
     const schedules = this.day_schedules.get(dayOfWeek)
     if (!schedules) return []
     for (const schedule of schedules) {
-      const {startMinutes, endMinutes} = schedule
+      const { startMinutes, endMinutes } = schedule
       const isInRange = currentMinutes >= startMinutes && currentMinutes < endMinutes
-      if (isInRange) matches.push(schedule.data);
+      if (isInRange) matches.push(schedule.data)
     }
-    return matches;
+    return matches
   }
 }

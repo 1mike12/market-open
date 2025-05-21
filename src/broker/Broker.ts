@@ -1,25 +1,28 @@
-import {toZonedTime} from "date-fns-tz";
-import type {EnumType} from "../types/EnumType";
-import type {EnumValue} from "../types/EnumValue";
-import {Schedule} from "../helpers/Schedule";
+import { toZonedTime } from "date-fns-tz"
+import { Schedule } from "../helpers/Schedule"
+import type { EnumType } from "../types/EnumType"
+import type { EnumValue } from "../types/EnumValue"
 
 export type WeekdaySchedule<T extends EnumType> = {
-  day: number;
-  type: EnumValue<T>;
-  start: string;
-  end: string;
+  day: number
+  type: EnumValue<T>
+  start: string
+  end: string
 }
 
-type HolidayToSessionFunction<S extends EnumType, H extends EnumType> = (h: EnumValue<H>, dt: Date) => EnumValue<S> | null
+type HolidayToSessionFunction<S extends EnumType, H extends EnumType> = (
+  h: EnumValue<H>,
+  dt: Date
+) => EnumValue<S> | null
 
 export type BrokerConfig<S extends EnumType, H extends EnumType> = {
-  name: string;
-  sessionEnum: S;
-  holidayEnum: H;
-  timezone: string;
-  weeklySchedule: WeekdaySchedule<S>[];
-  holidays: ((date: Date) => EnumValue<H> | null)[];
-  holidayToStatus: HolidayToSessionFunction<S, H>;
+  name: string
+  sessionEnum: S
+  holidayEnum: H
+  timezone: string
+  weeklySchedule: WeekdaySchedule<S>[]
+  holidays: ((date: Date) => EnumValue<H> | null)[]
+  holidayToStatus: HolidayToSessionFunction<S, H>
 }
 
 /**
@@ -27,7 +30,6 @@ export type BrokerConfig<S extends EnumType, H extends EnumType> = {
  * @param H - The type of the holiday enum
  */
 export class Broker<S extends EnumType, H extends EnumType> {
-
   scheduler = new Schedule<EnumValue<S>>()
 
   constructor(
@@ -35,7 +37,7 @@ export class Broker<S extends EnumType, H extends EnumType> {
     public name = config.name,
     public timezone = config.timezone,
     public holidays = config.holidays,
-    public holidayToStatusMapper = config.holidayToStatus,
+    public holidayToStatusMapper = config.holidayToStatus
   ) {
     for (const s of config.weeklySchedule) {
       this.scheduler.addSchedule(s.day, s.start, s.end, s.type)
@@ -51,7 +53,7 @@ export class Broker<S extends EnumType, H extends EnumType> {
   isOpen(systemDate?: Date): boolean {
     if (!systemDate) systemDate = new Date()
     const statuses = this.getOpenStatuses(systemDate)
-    return statuses !== null;
+    return statuses !== null
   }
 
   /**
@@ -76,18 +78,18 @@ export class Broker<S extends EnumType, H extends EnumType> {
   private getTimeInfo(timeDate: Date) {
     const currentMinutes = timeDate.getHours() * 60 + timeDate.getMinutes()
     const dayOfWeek = timeDate.getDay()
-    return {currentMinutes, dayOfWeek};
+    return { currentMinutes, dayOfWeek }
   }
 
   private getHolidaySession(localDate: Date) {
     for (const holiday of this.holidays) {
-      const holidayStatus = holiday(localDate);
+      const holidayStatus = holiday(localDate)
       if (holidayStatus) {
-        const holidaySession = this.holidayToStatusMapper(holidayStatus, localDate);
-        return {holidayStatus, holidaySession};
+        const holidaySession = this.holidayToStatusMapper(holidayStatus, localDate)
+        return { holidayStatus, holidaySession }
       }
     }
-    return {holidayStatus: null, sessionType: null};
+    return { holidayStatus: null, sessionType: null }
   }
 
   /**
@@ -104,8 +106,8 @@ export class Broker<S extends EnumType, H extends EnumType> {
    */
   getOpenStatuses(systemDate: Date) {
     const localHourAndMinutes = toZonedTime(systemDate, this.timezone)
-    const {currentMinutes, dayOfWeek} = this.getTimeInfo(localHourAndMinutes);
-    const {holidayStatus, holidaySession} = this.getHolidaySession(localHourAndMinutes);
+    const { currentMinutes, dayOfWeek } = this.getTimeInfo(localHourAndMinutes)
+    const { holidayStatus, holidaySession } = this.getHolidaySession(localHourAndMinutes)
 
     if (holidayStatus) {
       if (holidaySession === null) return null
@@ -114,6 +116,6 @@ export class Broker<S extends EnumType, H extends EnumType> {
     }
 
     const matches = this.scheduler.getSessions(dayOfWeek, currentMinutes)
-    return matches.length > 0 ? matches : null;
+    return matches.length > 0 ? matches : null
   }
 }

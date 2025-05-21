@@ -1,2 +1,2 @@
-export {Robinhood} from "./Robinhood";
-export {NYSE} from "./NYSE"
+export { NYSE } from "./NYSE"
+export { Robinhood } from "./Robinhood"

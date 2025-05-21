@@ -1,4 +1,4 @@
-import {getStatusForShiftingHoliday} from "./getStatusForShiftingHoliday";
+import { getStatusForShiftingHoliday } from "./getStatusForShiftingHoliday"
 
 /**
  * Determines if the market is closed based on NYSE Christmas rules:
@@ -12,5 +12,5 @@ import {getStatusForShiftingHoliday} from "./getStatusForShiftingHoliday";
  * @returns boolean True if market is closed, false if open
  */
 export function getChristmas(date: Date) {
-    return getStatusForShiftingHoliday(date, 12, 25)
+  return getStatusForShiftingHoliday(date, 12, 25)
 }

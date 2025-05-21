@@ -7,9 +7,9 @@
  * @returns {number} - The decimal representation of the time.
  */
 export function convertTimeToDecimal(date: Date): number {
-    const hours = date.getHours();
-    const minutes = date.getMinutes() / 60;
-    const seconds = date.getSeconds() / 3600;
-    const milliseconds = date.getMilliseconds() / 3600000;
-    return hours + minutes + seconds + milliseconds;
+  const hours = date.getHours()
+  const minutes = date.getMinutes() / 60
+  const seconds = date.getSeconds() / 3600
+  const milliseconds = date.getMilliseconds() / 3600000
+  return hours + minutes + seconds + milliseconds
 }

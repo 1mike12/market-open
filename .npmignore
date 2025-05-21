@@ -7,3 +7,6 @@ node_modules/
 tsconfig.json
 yarn.lock
 *.log
+.idea/
+.vscode/
+.run/

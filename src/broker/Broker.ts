@@ -104,7 +104,8 @@ export class Broker<S extends EnumType, H extends EnumType> {
    * make the equivalent NYC time. Or preferably use a date helper
    * @param systemDate
    */
-  getOpenStatuses(systemDate: Date) {
+  getOpenStatuses(systemDate?: Date) {
+    if (!systemDate) systemDate = new Date()
     const localHourAndMinutes = toZonedTime(systemDate, this.timezone)
     const { currentMinutes, dayOfWeek } = this.getTimeInfo(localHourAndMinutes)
     const { holidayStatus, holidaySession } = this.getHolidaySession(localHourAndMinutes)

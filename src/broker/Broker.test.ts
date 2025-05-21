@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import * as sinon from 'sinon';
 import {Broker} from './Broker';
 import {nyse_basic_brokerage} from "./test_configs/nyse_basic_brokerage";
 import {all_open_brokerage_except_new_years} from "./test_configs/all_open_brokerage_except_new_years";
@@ -44,6 +45,31 @@ describe('HolidayType', () => {
             // sunday
             expect(broker.getOpenStatuses(new Date('2021-01-10T17:00:00Z'))).deep.equal(null); // 12:00 PM NYC time
         })
+    })
+
+    describe("no date parameter", ()=> {
+        let clock: sinon.SinonFakeTimers;
+        const broker = new Broker(nyse_basic_brokerage);
+
+        beforeEach(() => {
+            clock = sinon.useFakeTimers();
+        });
+
+        afterEach(() => {
+            clock.restore();
+        });
+
+        it("should take the current time set to 9:00 as closed", ()=> {
+            // Set to 9:00 AM NYC time (14:00 UTC)
+            clock.setSystemTime(new Date('2024-01-01T14:00:00Z'));
+            expect(broker.isOpen()).equal(false);
+        });
+
+        it("should take the current time set to 9:30 am as open", ()=> {
+            // Set to 9:30 AM NYC time (14:30 UTC)
+            clock.setSystemTime(new Date('2024-01-01T14:30:00Z'));
+            expect(broker.isOpen()).equal(true);
+        });
     })
 
     describe("other methods", () => {
